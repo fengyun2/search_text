@@ -39,6 +39,7 @@
             func.call(this)
           }*/
 
+
         Function.prototype.bind = function (context) {
             /*  var self = this;
               return function() {
@@ -65,6 +66,15 @@
             console.log([a, b, c, d])
         }.bind(obj, 1, 2)
         func(3, 4)
+
+        /**
+         * 欢迎大家加入我们的大家庭，你也看不到我的
+         *
+         * @param {*} [params=[]]
+         */
+        function HelloWord(params = []) {
+            console.log('欢迎来到中国的大家庭：', ...params)
+        }
     </script>
 </body>
 
