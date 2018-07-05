@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>首页-我是一个可爱的小萝莉</title>
+</head>
+
+<body>
+    <div id="div1">我是一个div</div>
+    <div class="hidden">
+        你一定能看到我的
+        <!-- 这里的我，你是看不到的啦 -->
+    </div>
+    <script type="text/javascript">
+        // var getId = function(id) {
+        //  return document.getElementById(id)
+        // }
+        /*这里是测试内容，真的!!*/
+        document.getElementById = (function (func) {
+            return function () {
+                return func.apply(document, arguments)
+            }
+        })(document.getElementById)
+        var getId = document.getElementById;
+        console.log(getId('div1'))
+
+        /*      var func = function(a, b, c) {
+          'use strict';
+          console.log(this)
+          console.log(this === window)
+        }
+        func.apply(null, [1,2,3])*/
+
+        /*  document.getElementById('div1').onclick = function() {
+            var func =function() {
+              console.log(this.id)
+            }
+            func.call(this)
+          }*/
+
+        Function.prototype.bind = function (context) {
+            /*  var self = this;
+              return function() {
+                return self.apply(context, arguments)
+              }*/
+
+            var self = this,
+                context = [].shift.call(arguments), // 提取出上下文
+                args = [].slice.call(arguments); // 剩余参数转为数组
+
+            console.log(context, arguments, args)
+            return function () {
+                // 结合两次的参数
+                return self.apply(context, [].concat.call(args, [].slice.call(arguments)))
+            }
+        }
+
+        var obj = {
+            name: 'sven'
+        }
+
+        var func = function (a, b, c, d) {
+            console.log(this.name)
+            console.log([a, b, c, d])
+        }.bind(obj, 1, 2)
+        func(3, 4)
+    </script>
+</body>
+
+</html>
