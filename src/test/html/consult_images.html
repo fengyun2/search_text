@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>用户文件上传-上传中</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="js/jquery-1.7.2.min.js" type="text/javascript"></script>
+    <script src="js/consult_images.js?v=0.0.1" type="text/javascript"></script>
+    <style type="text/css">
+        #fileUpload {
+            background-color: #0000CC;
+            filter: alpha(opacity=0);
+            -moz-opacity: 0;
+            opacity: 0;
+        }
+
+        #AppId,
+        #txtCridCode,
+        #txtls,
+        #txtywlx {
+            display: none;
+        }
+
+        .biankuang {
+            border-radius: 5px;
+            width: 100%;
+            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2) inset;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            border-collapse: collapse;
+            empty-cells: show;
+
+
+        }
+
+        .biankuang td {
+            line-height: 30px;
+            height: 30px;
+            padding-left: 8px;
+        }
+
+        .hong {
+            color: #FF5151
+        }
+
+        .bktdtop {
+            border-top: solid 1px #D0D0D0;
+        }
+
+        h4 {
+            height: 30px;
+            line-height: 30px;
+            margin: 0px;
+        }
+
+        h3 {
+            height: 30px;
+            line-height: 30px;
+            margin: 0px;
+        }
+
+        .att_del {
+            cursor: pointer;
+            font-family: Microsoft YaHei;
+            FONT-SIZE: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            padding-left: 20px;
+        }
+
+        .mytips {
+            width: 280px;
+            background: #fff;
+            box-shadow: 0 2px 5px #999;
+            border: 1px solid #c2c2c2\9;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            margin-left: -140px;
+            margin-top: -73px;
+            z-index: 111111;
+            border-radius: 3px;
+        }
+
+        *html .mytips {
+            position: absolute;
+            top: expression(eval(document.documentElement.scrollTop));
+            margin-top: 200px;
+        }
+
+        .mytips h2 {
+            height: 36px;
+            line-height: 36px;
+            background: #f0f0f0;
+            color: #666;
+            font-size: 16px;
+            font-weight: normal;
+            padding-left: 20px;
+            margin: 0;
+        }
+
+        .mytips .close {
+            width: 13px;
+            height: 13px;
+            text-indent: -9999px;
+            background: url(../images/dialog-close3.png) no-repeat;
+            position: absolute;
+            display: block;
+            right: 10px;
+            top: 10px;
+        }
+
+        .mytips p {
+            font-size: 14px;
+            color: #666;
+            padding: 20px;
+        }
+
+        .thumbnail {
+            width: 22px;
+            height: 22px;
+            padding-right: 10px
+        }
+
+        /*******loading******/
+
+        .showLoading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: none;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            font-size: 0;
+            z-index: 999;
+        }
+
+        .showLoading .imgi {
+            width: 30px;
+            height: 30px;
+            margin-top: 300px;
+            background: url(images/loading.gif) no-repeat;
+            background-size: 30px;
+            display: inline-block;
+        }
+
+        .showLoading p {
+            font-size: 12px;
+            margin-top: 12px;
+            color: #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <div data-role="page" data-quicklinks="true">
+        <form id="Form1" method="post" enctype="multipart/form-data" target="uploadResult" data-ajax="false">
+
+            <div data-role="header">
+                <h1>用户文件上传</h1>
+            </div>
+            <!-- /header -->
+            <div data-role="content">
+                <div style=" margin-bottom:8px;display:none" id="lscontent">
+                    <table class="biankuang">
+                        <tr>
+                            <td>　　名称：</td>
+                            <td colspan="2" class="hong">
+                                <span ID="Labdisname"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="bktdtop">问诊时间：</td>
+                            <td colspan="2" class="bktdtop">
+                                <span ID="Labdatetime"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="bktdtop">医院名称：</td>
+                            <td colspan="2" class="bktdtop hong">
+                                <span ID="Labhosname"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="bktdtop">
+                                <div class="hong">
+                                    <span ID="Labdocname"></span>
+                                </div>
+                            </td>
+                            <td class="bktdtop">
+                                <span ID="Labzhichen"></span>
+                            </td>
+                            <td class="bktdtop">
+                                <span ID=Labkeshi></span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="lstips" style="margin-bottom:10px; display:none">请点击下方按钮上传身份证、社保卡的正面照、慢病证明书（门慢病人需提供）</div>
+                <label for="file" id="lstitle">文件名称</label>
+                <div data-role="none" style="position:relative; overflow:hidden; border-radius:5px;width:100%; background:#FF8040; height:50px; ">
+
+                    <span style="position:absolute;top:15px; left:0px; text-align:center; width:100%; height:100%; font-weight:bold; font-size:16px;color:#333;">添加文件</span>
+                    <input data-role="none" type="file" name="fileUpload" id="fileUpload" style="position:absolute;top:0px; left:0px; text-align:center; width:100%;height:50px; "
+                        onchange="imgPreview(this)" />
+                </div>
+            </div>
+            <!-- /content -->
+            <div style="padding: 1em; padding-top:0px;">
+                <div id="loadPic" style=" width:100%; height:11px;vertical-align:middle ; line-height:11px;display:none; border:1px solid #CCC;margin-bottom: 1em;border-radius:3px;">
+                    <div id="Pic_loading" style="background-image:url(loading9.gif); vertical-align:middle ;height:9px; width:5%"></div>
+                </div>
+                <div id="UploadResult" data-role="footer">
+                    <h3 style="color:#EF961E">上传的图片</h3>
+                </div>
+
+                <input id="PicArry" name="PicArry" type="hidden" />
+                <input id="Hidfilesize" name="Hidfilesize" type="hidden" value="" />
+                <span ID="AppId"></span>
+                <span ID="txtCridCode"></span>
+                <span ID="txtls"></span>
+                <span ID="txtywlx"></span>
+                <input type="button" name="uploadFinish" id="uploadFinish" value="完成上传" onclick="FinishPic();" />
+                <!-- /footer -->
+                <div data-role="content" data-theme="c">
+                    <p>
+                        <b>备注:</b>
+                    </p>
+                    <p> 1.点“添加文件”按钮，上传相关文件</p>
+                    <p> 2.确认上传相关文件后，点"完成上传"按钮</p>
+                    <p> 3.微信扫描如不能上传，请点击右上角用浏览器打开。</p>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</body>
+
+</html>
