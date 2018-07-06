@@ -167,7 +167,7 @@ function concatFiles(extname = '') {
           index++;
         })
         lineReader.on('close', () => {
-          fWrite.write(os.EOL + os.EOL);
+          // fWrite.write(os.EOL + os.EOL);
         })
       })
     }
