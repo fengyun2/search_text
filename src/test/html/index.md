@@ -1,3 +1,4 @@
+1. E:/test/js/20180629/search_text/src/test/html/index.html：
 line6: 首页-我是一个可爱的小萝莉
 line10: 我是一个
 line12: 你一定能看到我的
