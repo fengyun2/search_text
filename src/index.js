@@ -118,60 +118,46 @@ function concatFiles(extname = '') {
     console.error(err)
   })
   const fWrite = fs.createWriteStream(fWriteName);
-  glob(`${__dirname}/test/**/*.${extname}`, function (err, files) {
-    if (Array.isArray(files) && files.length) {
-      files.forEach((file) => {
-        if (!file) {
-          return false;
+  const files = glob.sync(`${__dirname}/test/**/*.${extname}`)
+  if (Array.isArray(files) && files.length) {
+    files.forEach((file) => {
+      if (!file) {
+        return false;
+      }
+      let isExitIgnoreFiles = false;
+      ignoreFiles.forEach(ignoreFile => {
+        if (file.includes(ignoreFile)) {
+          isExitIgnoreFiles = true;
         }
-        let isExitIgnoreFiles = false;
-        ignoreFiles.forEach(ignoreFile => {
-          if (file.includes(ignoreFile)) {
-            isExitIgnoreFiles = true;
-          }
-        })
-        if (isExitIgnoreFiles) {
-          return false;
-        }
-        const basename = path
-          .basename(file)
-          .replace(`${path.extname(file)}`, '')
-        if (!basename) {
-          return false;
-        }
-
-        // console.log(fWriteName)
-        const fRead = fs.createReadStream(file);
-        // const fWrite = fs.createWriteStream(fWriteName, {'flags': 'a'});
-        const lineReader = readline.createInterface({
-          input: fRead, // 建立 txt 文件的读取流
-          // output: fWrite, terminal: true
-        })
-        let index = 1;
-
-        // fWrite.write(file + os.EOL + os.EOL);
-
-        lineReader.on('line', function (line) { // 按行对读取流内容进行操作
-          /*                if(line) {
-                  line = line.replace(/"([^"]*)"/g, '“${1}”')
-                }*/
-          /*           if (line.match(ignoreReg)) {
-            return false;
-          }
-          const matchText = line.match(chineseReg);
-          if (matchText) {
-            // console.log(path.basename(file), matchText.join('             '));
-            fWrite.write('line' + index + ': ' + matchText.join('') + os.EOL);
-          } */
-          fWrite.write(line + os.EOL);
-          index++;
-        })
-        lineReader.on('close', () => {
-          // fWrite.write(os.EOL + os.EOL);
-        })
       })
-    }
-  });
+      if (isExitIgnoreFiles) {
+        return false;
+      }
+      const basename = path
+        .basename(file)
+        .replace(`${path.extname(file)}`, '')
+      if (!basename) {
+        return false;
+      }
+
+      // console.log(fWriteName)
+      const fRead = fs.createReadStream(file);
+      // const fWrite = fs.createWriteStream(fWriteName, {'flags': 'a'});
+      const lineReader = readline.createInterface({
+        input: fRead, // 建立 txt 文件的读取流
+        // output: fWrite, terminal: true
+      })
+      let index = 1;
+
+      // fWrite.write(file + os.EOL + os.EOL);
+
+      lineReader.on('line', function (line) { // 按行对读取流内容进行操作
+        fWrite.write(line + os.EOL);
+        index++;
+      })
+      lineReader.on('close', () => {})
+    })
+  }
 }
 
 var extnameArr = ['html', 'js']
