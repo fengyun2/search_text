@@ -15,7 +15,7 @@
     "glob": "^7.1.2"
   },
   "dependencies": {
-    "@types/glob": "^5.0.35",
+    "@types/glob": "^5.0.38",
     "@types/node": "^10.5.1"
   }
 }
